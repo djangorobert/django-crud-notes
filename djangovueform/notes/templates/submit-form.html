@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Django Vuejs</title>
+</head>
+<body>
+
+  
+
+  <div id="app">
+
+    <p style="color: green">[[success_msg]]</p>
+    <p style="color: red">[[err_msg]]</p>
+
+    <!-- form -->
+    <form>
+      <input type="text" v-model="username">
+      <input type="password" v-model="password">
+      <input v-on:click.prevent="submitForm" type="submit" value="submit">
+    </form>
+
+  </div>
+
+
+
+
+
+    <!-- vuejs and axios -->
+     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+       <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+<script>
+
+const vms = new Vue({
+    delimiters: ['[[', ']]'],
+  el: '#app',
+        data: {
+          username: null,
+          password: null,
+
+          success_msg: "",
+          err_msg: "",
+
+        },
+        methods: {
+          submitForm: function(){
+            this.success_msg = ""
+            this.err_msg = ""
+            axios({
+                method : "POST",
+                url:"{% url 'submitform' %}", //django path name
+                headers: {'X-CSRFTOKEN': '{{ csrf_token }}', 'Content-Type': 'application/json'},
+                data : {"username":this.username, "password":this.password},//data
+              }).then(response => {
+
+                  this.success_msg = response.data['msg'];
+                  
+
+              }).catch(err => {
+                     this.err_msg = err.response.data['err'];
+              });
+
+          },
+
+        },
+
+    });
+
+</script>
+
+</body>
+</html>

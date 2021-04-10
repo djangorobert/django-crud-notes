@@ -1,0 +1,29 @@
+{% extends 'notes/base.html' %} 
+
+
+
+{% block content %}
+<h1>Note Pad</h1>
+<a class="btn btn-dark" href="{% url 'note_form'  %}" role="button">Add Note</a>
+<br>
+<br>
+<br>
+
+{% for x in note_list %}
+<div class="card" style="width: 18rem;">
+    
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'note_detail' x.pk %}">{{ x.description }}</a></h5>
+      <a type="button" class="btn btn-warning" href="{% url 'note_update_form' x.pk %}">Update</a>
+        <a type="button" class="btn btn-danger" href="{% url 'note_confirm_delete' x.pk %}">Delete</a>
+    </div>
+  </div>
+    
+    
+   {% empty %}
+   <li>No notes yet</li>
+
+   {% endfor %}
+
+</ul>
+{% endblock %}
